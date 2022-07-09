@@ -497,23 +497,23 @@
 
                       <tr>
                         <td>Good</td>
-                        <td id="count_good">00</td>
+                        <td id="Good">00</td>
                       </tr>
                       <tr>
                         <td>No Read</td>
-                        <td id="count_noread">00</td>
+                        <td id="NoRead">00</td>
                       </tr>
                       <tr>
                         <td>Wrong Code</td>
-                        <td id="count_wrong">00</td>
+                        <td id="WrongCode">00</td>
                       </tr>
                       <tr>
                         <td>No Ready</td>
-                        <td id="count_noready">00</td>
+                        <td id="NoReady">00</td>
                       </tr>
                       <tr>
                         <td>Unknow</td>
-                        <td id="count_unknow">00</td>
+                        <td id="Unknow">00</td>
                       </tr>
 
                     </tbody>
@@ -586,28 +586,27 @@
 
     function handleData(oData) {
       // todo: Config------------
+      console.log("HANDLE DATA: ", oData);
       const title = "Status report statistics";
       const task = ["Task", "Status report statistics"];
-      const types = [{
-          "Status": "Good",
-          "Quantity": oData["count_good"]
-        },
-        {
-          "Status": "Wrong",
-          "Quantity": oData["count_wrong"]
-        },
-        {
-          "Status": "NoRead",
-          "Quantity": oData["count_noready"]
-        }
-
-      ];
+      const types = [];
+      for (key in oData){
+        const ob = {
+          "Status": key,
+          "Quantity":oData[key]
+        };
+      
+        types.push(ob);
+      
+      }
       let count_total = 0;
       for (key in oData) {
         $("#" + key).text(oData[key]);
         count_total += parseInt(oData[key]);
 
       }
+    
+      // oData.forEach(e=>e["Quantity"] = parseFloat(e["Quantity"])/parseFloat(count_total));
       $("#count_total").text(count_total);
 
       // todo: Detail Data----------
@@ -621,13 +620,14 @@
         "ajax": window.baseURL+"/get-datatable" // đường dẫn trỏ tới Controller trả về dữ liệu
       });
 
-
-
       // Config---------------------
 
 
-      let drawData = types.map(e => [e.Status, e.Quantity]);
+      let drawData = types.map(e => [e.Status, e.Quantity/count_total]);
+      
       drawData.unshift(task);
+     
+      // console.log("DRAW DATA: ", drawData);
       var data = google.visualization.arrayToDataTable(drawData);
       var options = {
         title: title,
@@ -637,12 +637,10 @@
 
       let str = "";
       $("#total").text(oData.length);
-      // $("#table-data tbody").html(str);
 
     }
 
     function drawChart() {
-
       var data1 = [];
       // todo: Config------------
       const title = "Status report statistics";
@@ -663,13 +661,10 @@
       ];
       // Config---------------------
 
-      types.forEach(e => {
-        const quantity = data1.filter(v => v.Status == e.Status).length;
-        e.Quantity = quantity;
-      });
 
       const drawData = types.map(e => [e.Status, e.Quantity]);
       drawData.unshift(task);
+      console.log("DRAWWWWW: ", drawData);
       chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
       var data = google.visualization.arrayToDataTable(drawData);
       var options = {
@@ -703,7 +698,6 @@
         dataType: "json",
         data: $("#form-data").serialize()
       }).done(function(data) {
-        console.log("RESULT: ", data);
         handleData(data);
       });
 

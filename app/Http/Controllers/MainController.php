@@ -59,12 +59,12 @@ class MainController extends Controller
         $toDate = Carbon::parse($params["to_date"])->format($format);
         $query = DB::table("Table_ResultDataman")
         ->select(
-            DB::raw("COUNT( (CASE WHEN Status='Good' THEN ID END)) 'count_good'"),
-            DB::raw("COUNT( (CASE WHEN Status='Wrong' THEN ID END)) 'count_wrong'"),
-            DB::raw("COUNT( (CASE WHEN Status='NoRead' THEN ID END)) 'count_noread'"),
-            DB::raw("COUNT( (CASE WHEN Status='Noready' THEN ID END)) 'ount_noready'"),
-            DB::raw("COUNT( (CASE WHEN Status='Unknow' THEN ID END)) 'count_unknow'")
+            DB::raw("COUNT( (CASE WHEN Status='Good' THEN ID END)) 'Good'"),
+            DB::raw("COUNT( (CASE WHEN Status='Wrong' THEN ID END)) 'WrongCode'"),
+            DB::raw("COUNT( (CASE WHEN Status='No Read' THEN ID END)) 'NoRead'"),
+            DB::raw("COUNT( (CASE WHEN Status='Unknow' THEN ID END)) 'Unknow'")
         );
+  
         // if (isset($params["from_date"]) && $params["from_date"] !== ""){
         //     $query -> where("DateTime","=", $params["from_date"]);
         // }
@@ -84,7 +84,7 @@ class MainController extends Controller
 
         }
         $data = $query->first();
-        // dd("SQL: ",$query->toSql(), $fromDate, $toDate, $data);
+     
         return response()->json($data);
     }
     public function filter(Request $request){
