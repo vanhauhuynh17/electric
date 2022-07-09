@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/index','MainController@index') -> name("chart");
+Route::get('/index','MainController@index');
+Route::post('/filter','MainController@filter') -> name("filter-chartfilter-chart");
 Route::get('/login','MainController@login') -> name("login");
 Route::get('/logout','MainController@logout') -> name("logout");
 Route::post('/login','MainController@postLogin') -> name("post-login");
-Route::get('/get-data','MainController@getData') -> name("get-data");
+Route::post('/get-data','MainController@getData') -> name("get-data");
 Route::get('/get-datatable','MainController@getDatatable') -> name("get-datatable");
 Route::get('/export-data','MainController@exportData') -> name("export-data");

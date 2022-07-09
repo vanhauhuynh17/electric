@@ -9,9 +9,9 @@
   <title>PolluxUI Admin</title>
   <!-- base:css -->
   
-  @include('styles.typicons') 
+  @include('lib.css.typicons') 
 
-  @include('styles.bendor-bundle-base') 
+  @include('lib.css.bendor-bundle-base') 
 
   <!-- <link rel="stylesheet" href="assets/vendors/typicons/typicons.css"> -->
   <!-- <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css"> -->
@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  @include('styles.vertical-light-layout')
+  @include('lib.css.vertical-light-layout')
   <!-- <link rel="stylesheet" href="assets/css/vertical-layout-light/style.css"> -->
   <!-- endinject -->
   <link rel="shortcut icon" href="assets/images/favicon.png" />
@@ -325,101 +325,104 @@
       </div>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
-      <form id="form-data">
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item">
-              <span class="menu-title">Từ ngày</span>
+    
+      <form method="get" id="form-data">
+      <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
+          <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+              <li class="nav-item">
+                <span class="menu-title">Từ ngày</span>
 
-            </li>
+              </li>
 
-            <li class="nav-item">
+              <li class="nav-item">
 
-              <input class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
+                <input class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
 
-            </li>
+              </li>
 
-            <li class="nav-item">
-              <span class="menu-title">Đến ngày</span>
-            </li>
+              <li class="nav-item">
+                <span class="menu-title">Đến ngày</span>
+              </li>
 
-            <li class="nav-item">
+              <li class="nav-item">
 
-              <input class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
+                <input class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
 
-            </li>
+              </li>
 
-            <li class="nav-item">
-              Status
-            </li>
+              <li class="nav-item">
+                Status
+              </li>
 
-            <li class="nav-item">
-              <select name="status" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
-                <option selected value="">All</option>
-                <option value="Good">Good</option>
-                <option value="NoRead">NoRead</option>
-                <option value="Wrong">Wrong</option>
-                <option value="Noready">Noready</option>
-                <option value="Unknow">Unknow</option>
-              </select>
-            </li>
-
-            <li class="nav-item">
-              Line
-            </li>
-
-            <li class="nav-item">
-              <div class="input-group">
-                <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
+              <li class="nav-item">
+                <select name="status" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
                   <option selected value="">All</option>
-                  <option value="Kawa1">Kawa1</option>
-                  <option value="Kawa2">Kawa2</option>
-                  <option value="Mespack1">Mespack1</option>
-                  <option value="Mespack2">Mespack2</option>
-                  <option value="Mespack3">Mespack3</option>
-                  <option value="Mespack3">Demar</option>
+                  <option value="Good">Good</option>
+                  <option value="NoRead">NoRead</option>
+                  <option value="Wrong">Wrong</option>
+                  <option value="Noready">Noready</option>
+                  <option value="Unknow">Unknow</option>
                 </select>
-                <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
-              </div>
+              </li>
 
-            </li>
+              <li class="nav-item">
+                Line
+              </li>
 
-            <li class="nav-item">
-              SKUID
-            </li>
+              <li class="nav-item">
+                <div class="input-group">
+                  <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
+                    <option selected value="">All</option>
+                    <option value="Kawa1">Kawa1</option>
+                    <option value="Kawa2">Kawa2</option>
+                    <option value="Mespack1">Mespack1</option>
+                    <option value="Mespack2">Mespack2</option>
+                    <option value="Mespack3">Mespack3</option>
+                    <option value="Mespack3">Demar</option>
+                  </select>
+                  <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
+                </div>
 
-            <li class="nav-item">
-              <div class="input-group">
-                <input name="skuid" type="text" aria-label="SKUID" class="data-change form-control">
-              </div>
+              </li>
 
-            </li>
+              <li class="nav-item">
+                SKUID
+              </li>
+
+              <li class="nav-item">
+                <div class="input-group">
+                  <input name="skuid" type="text" aria-label="SKUID" class="data-change form-control">
+                </div>
+
+              </li>
 
 
-            <li class="nav-item">
-              <a id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="ui-basic">
-                <i class="typcn typcn-document-text menu-icon"></i>
-                <span class="menu-title">Reports</span>
+              <li class="nav-item">
+                   
+                        <button type="submit"id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" data-toggle="collapse"aria-expanded="false" aria-controls="ui-basic">
+                          <i class="typcn typcn-document-text menu-icon"></i>
+                          <span class="menu-title">Reports</span>
 
-              </a>
-              <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                </ul>
-              </div>
-            </li>
+                        </button>
+                <div class="collapse" id="ui-basic">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                  </ul>
+                </div>
+              </li>
 
-            <li class="nav-item">
-              <a href="{{route('export-data')}}" class="export-excel menu-title">
-                Export Excel
-                <img style="width:30px" src="assets/images/word.png" />
-              </a>
-            </li>
+              <li class="nav-item">
+                <a href="{{route('export-data')}}" class="export-excel menu-title">
+                  Export Excel
+                  <img style="width:30px" src="assets/images/word.png" />
+                </a>
+              </li>
 
-          </ul>
-        </nav>
+            </ul>
+          </nav>
       </form>
       <!-- partial -->
       <div class="main-panel">
@@ -545,6 +548,7 @@
   <!-- container-scroller -->
   <!-- base:js -->
   <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+  @include('lib.js.vendor-bundle-base') 
   <!-- endinject -->
   <!-- inject:js -->
   <script src="assets/js/off-canvas.js"></script>
@@ -571,6 +575,7 @@
   <script type="text/javascript">
     // todo: GLOBAL-------------------------
     var table;
+    window.baseURL = "https://4f63-123-30-64-66.ap.ngrok.io";
     google.charts.load("current", {
       packages: ["corechart"]
     });
@@ -600,7 +605,7 @@
       let count_total = 0;
       for (key in oData) {
         $("#" + key).text(oData[key]);
-        count_total += oData[key];
+        count_total += parseInt(oData[key]);
 
       }
       $("#count_total").text(count_total);
@@ -613,7 +618,7 @@
       table = $('#table-detail-data').DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": "{{route('get-datatable')}}" // đường dẫn trỏ tới Controller trả về dữ liệu
+        "ajax": window.baseURL+"/get-datatable" // đường dẫn trỏ tới Controller trả về dữ liệu
       });
 
 
@@ -638,8 +643,6 @@
 
     function drawChart() {
 
-      // const data1 = '{{$data}}';
-      //  var data1 = {!! json_encode($data, JSON_HEX_TAG) !!};
       var data1 = [];
       // todo: Config------------
       const title = "Status report statistics";
@@ -692,19 +695,17 @@
 
     }
 
-    $("#btn-report").click(function() {
+    $("#btn-report").click(function(e) {
+      e.preventDefault();
       $.ajax({
-        url: "{{route('get-data')}}",
-        type: 'GET',
+        url: window.baseURL + "/get-data",
+        type: 'POST',
         dataType: "json",
         data: $("#form-data").serialize()
       }).done(function(data) {
         console.log("RESULT: ", data);
         handleData(data);
       });
-
-
-
 
     });
     //       table = $('#example').DataTable( {

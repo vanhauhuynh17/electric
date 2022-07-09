@@ -27,9 +27,9 @@ class MainController extends Controller
     }
     public function index()
     {
-       $data = DB::table("Table_ResultDataman")->get();
-        // $data = [];
-        // dd($data);
+
+        $data = [];
+  
         return view('chart', ['data'=>$data]);
     }
     public function postLogin(Request $request){
@@ -51,7 +51,44 @@ class MainController extends Controller
 
     }
     public function getData(Request $request){
-       
+  
+  
+        $params = $request ->all();
+        $format = "Y-m-d H:i:s";
+        $fromDate = Carbon::parse($params["from_date"])->format($format);
+        $toDate = Carbon::parse($params["to_date"])->format($format);
+        $query = DB::table("Table_ResultDataman")
+        ->select(
+            DB::raw("COUNT( (CASE WHEN Status='Good' THEN ID END)) 'count_good'"),
+            DB::raw("COUNT( (CASE WHEN Status='Wrong' THEN ID END)) 'count_wrong'"),
+            DB::raw("COUNT( (CASE WHEN Status='NoRead' THEN ID END)) 'count_noread'"),
+            DB::raw("COUNT( (CASE WHEN Status='Noready' THEN ID END)) 'ount_noready'"),
+            DB::raw("COUNT( (CASE WHEN Status='Unknow' THEN ID END)) 'count_unknow'")
+        );
+        // if (isset($params["from_date"]) && $params["from_date"] !== ""){
+        //     $query -> where("DateTime","=", $params["from_date"]);
+        // }
+        // if (isset($params["to_date"]) && $params["to_date"] !== ""){
+        //     $query -> where("DateTime","=", $params["to_date"]);
+        // }
+        if(isset($params["status"]) && $params["status"] !==""){
+            $query -> where("Status","=", $params["status"]);
+
+        }
+        if(isset($params["line"]) && $params["line"] !==""){
+            $query -> where("Line","=", $params["line"]);
+
+        }
+        if(isset($params["skuid"]) && $params["skuid"] !==""){
+            $query -> where("SKUID","=", $params["skuid"]);
+
+        }
+        $data = $query->first();
+        // dd("SQL: ",$query->toSql(), $fromDate, $toDate, $data);
+        return response()->json($data);
+    }
+    public function filter(Request $request){
+       dd(123);
         $params = $request ->all();
         $format = "Y-m-d H:i:s";
         $fromDate = Carbon::parse($params["from_date"])->format($format);
