@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use DB;
 use App\Models\ResultDataman;
 use Carbon\Carbon;
@@ -27,8 +28,8 @@ class MainController extends Controller
     }
     public function index()
     {
-
-        $data = [];
+        $baseURL =env('BASE_URL');
+    $data = ["base_url"=> $baseURL];
   
         return view('chart', ['data'=>$data]);
     }
@@ -200,9 +201,61 @@ class MainController extends Controller
     }
 
     public function exportData(Request $request){
+        // todo:Export excel ------------
+       
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+        
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('hello world.xlsx');
+        $fileName = "12notInvoiced.xlsx";
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment;filename="' . $fileName . '"');
+        $headers = array( 'Content-Type: application/excell', );
+        // return Response::download(storage_path('exports').'/'.'12notInvoiced.xlsx','12notInvoiced.xlsx> ',$headers);
+        return response('Hello World', 200)
+        ->header(
+            [
+                'Content-Type'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => "attachment; filename=report_buy_sell.xlsx"    
+            ]
+);
+        // end: Export Excel------------
+
+
+
+
+
+        $params = $request->all();
+        $format = "Y-m-d H:i:s";
+       
+      
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $query = DB::table("Table_ResultDataman");
+      
+        if (isset($params["from_date"]) && $params["from_date"] !== ""){
+            $fromDate = Carbon::parse($params["from_date"])->format($format);
+            $query -> where("DateTime",">=", $fromDate);
+        }
+        if (isset($params["to_date"]) && $params["to_date"] !== ""){
+            $toDate = Carbon::parse($params["to_date"])->format($format);
+            $query -> where("DateTime","<=", $toDate);
+        }
+        if(isset($params["status"]) && $params["status"] !==""){
+            $query -> where("Status","=", $params["status"]);
+
+        }
+        if(isset($params["line"]) && $params["line"] !==""){
+            $query -> where("Line","=", $params["line"]);
+
+        }
+        if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+            $query -> where("SKUID","=", $params["SKUID"]);
+
+        }
         $data = $query->get();
         $i = 2;
        

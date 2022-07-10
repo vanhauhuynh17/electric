@@ -575,7 +575,7 @@
   <script type="text/javascript">
     // todo: GLOBAL-------------------------
     var table;
-    window.baseURL = "https://4f63-123-30-64-66.ap.ngrok.io";
+    window.baseURL = "{{$data['base_url']}}";
     google.charts.load("current", {
       packages: ["corechart"]
     });
@@ -705,7 +705,7 @@
     $("#btn-report").click(function(e) {
       e.preventDefault();
       $.ajax({
-        url: window.baseURL + "/get-data",
+        url: "{{$data['base_url']}}" + "/get-data",
         type: 'POST',
         dataType: "json",
         data: $("#form-data").serialize()
