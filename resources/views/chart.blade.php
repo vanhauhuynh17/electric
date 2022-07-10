@@ -351,6 +351,28 @@
 
               </li>
 
+              
+              <li class="nav-item">
+                Line
+              </li>
+
+              <li class="nav-item">
+                <div class="input-group">
+                  <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
+                    <option selected value="">All</option>
+                    <option value="Kawa 1">Kawa 1</option>
+                    <option value="Kawa 2">Kawa 2</option>
+                    <option value="Mespack 1">Mespack 1</option>
+                    <option value="Mespack 2">Mespack 2</option>
+                    <option value="Mespack  3">Mespack 3</option>
+                    <option value="Demar">Demar</option>
+                  </select>
+                  <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
+                </div>
+
+              </li>
+
+
               <li class="nav-item">
                 Status
               </li>
@@ -364,26 +386,6 @@
                   <option value="Noready">Noready</option>
                   <option value="Unknow">Unknow</option>
                 </select>
-              </li>
-
-              <li class="nav-item">
-                Line
-              </li>
-
-              <li class="nav-item">
-                <div class="input-group">
-                  <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
-                    <option selected value="">All</option>
-                    <option value="Kawa1">Kawa1</option>
-                    <option value="Kawa2">Kawa2</option>
-                    <option value="Mespack1">Mespack1</option>
-                    <option value="Mespack2">Mespack2</option>
-                    <option value="Mespack3">Mespack3</option>
-                    <option value="Mespack3">Demar</option>
-                  </select>
-                  <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
-                </div>
-
               </li>
 
               <li class="nav-item">
@@ -427,48 +429,7 @@
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
-          <div class="row">
-            <div class="col-md-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Data</h4>
-                  <table id="table-detail-data" class="table">
-                    <thead>
-                      <tr>
-                        <th>
-                          ID
-                        </th>
-                        <th>
-                          DateTime
-                        </th>
-                        <th>
-                          Status
-                        </th>
-                        <th>
-                          SKUID
-                        </th>
-                        <th>
-                          ProductName
-                        </th>
-                        <th>
-                          Line
-                        </th>
-                        <th>
-                          Reject
-                        </th>
-                      </tr>
-                    </thead>
-                  </table>
-
-
-
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <div class="row">
+        <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -526,6 +487,48 @@
             </div>
 
           </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Data</h4>
+                  <table id="table-detail-data" class="table">
+                    <thead>
+                      <tr>
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          DateTime
+                        </th>
+                        <th>
+                          Status
+                        </th>
+                        <th>
+                          SKUID
+                        </th>
+                        <th>
+                          ProductName
+                        </th>
+                        <th>
+                          Line
+                        </th>
+                        <th>
+                          Reject
+                        </th>
+                      </tr>
+                    </thead>
+                  </table>
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+      
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
