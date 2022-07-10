@@ -11,6 +11,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Session;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class MainController extends Controller
 {
@@ -202,25 +205,8 @@ class MainController extends Controller
 
     public function exportData(Request $request){
         // todo:Export excel ------------
-       
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hello World !');
-        
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('hello world.xlsx');
-        $fileName = "12notInvoiced.xlsx";
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        // header('Content-Disposition: attachment;filename="' . $fileName . '"');
-        $headers = array( 'Content-Type: application/excell', );
-        // return Response::download(storage_path('exports').'/'.'12notInvoiced.xlsx','12notInvoiced.xlsx> ',$headers);
-        return response('Hello World', 200)
-        ->header(
-            [
-                'Content-Type'=>'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => "attachment; filename=report_buy_sell.xlsx"    
-            ]
-);
+        return Excel::download(new UsersExport, 'users.xlsx');
+
         // end: Export Excel------------
 
 
@@ -263,7 +249,7 @@ class MainController extends Controller
        
         $sheet->setCellValue('B1', 'SKUID');
         $sheet->setCellValue('C1', 'ProductName');
-        $sheet->setCellValue('D1', 'BarCode');
+        $sheet->setCellValue('D1', 'Barcode');
         $sheet->setCellValue('E1', 'Status');
         // dd("DATA: ", $data);
         foreach($data as $key => $value){
@@ -271,7 +257,7 @@ class MainController extends Controller
             $sheet->setCellValue("A$i", $date);        
             $sheet->setCellValue("B$i", $value->SKUID);
             $sheet->setCellValue("C$i", $value->ProductName);
-            $sheet->setCellValue("D$i", $value->BarCode);
+            $sheet->setCellValue("D$i", $value->Barcode);
             $sheet->setCellValue("E$i", $value->Status);
             $i++;
         }
