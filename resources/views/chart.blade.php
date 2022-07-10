@@ -617,17 +617,29 @@
       table = $('#table-detail-data').DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": window.baseURL+"/get-datatable" // đường dẫn trỏ tới Controller trả về dữ liệu
+        "ajax": {
+          "type":"GET",
+          "url": window.baseURL+"/get-datatable?"+$("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
+          data: function (d) {
+   
+                // d["params"] = JSON.parse($("#form-data").serialize());
+                // d.custom = $('#myInput').val();
+                // etc
+            },
+
+        
+        }
+       
       });
 
       // Config---------------------
 
 
-      let drawData = types.map(e => [e.Status, e.Quantity/count_total]);
+      let drawData = types.map(e => [e.Status,Math.round(e.Quantity/count_total*100)]);
       
       drawData.unshift(task);
      
-      // console.log("DRAW DATA: ", drawData);
+      console.log("DRAW DATA: ", drawData);
       var data = google.visualization.arrayToDataTable(drawData);
       var options = {
         title: title,

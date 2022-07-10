@@ -65,12 +65,12 @@ class MainController extends Controller
             DB::raw("COUNT( (CASE WHEN Status='Unknow' THEN ID END)) 'Unknow'")
         );
   
-        // if (isset($params["from_date"]) && $params["from_date"] !== ""){
-        //     $query -> where("DateTime","=", $params["from_date"]);
-        // }
-        // if (isset($params["to_date"]) && $params["to_date"] !== ""){
-        //     $query -> where("DateTime","=", $params["to_date"]);
-        // }
+        if (isset($params["from_date"]) && $params["from_date"] !== ""){
+            $query -> where("DateTime",">=", $fromDate);
+        }
+        if (isset($params["to_date"]) && $params["to_date"] !== ""){
+            $query -> where("DateTime","<=", $toDate);
+        }
         if(isset($params["status"]) && $params["status"] !==""){
             $query -> where("Status","=", $params["status"]);
 
@@ -79,8 +79,8 @@ class MainController extends Controller
             $query -> where("Line","=", $params["line"]);
 
         }
-        if(isset($params["skuid"]) && $params["skuid"] !==""){
-            $query -> where("SKUID","=", $params["skuid"]);
+        if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+            $query -> where("SKUID","=", $params["SKUID"]);
 
         }
         $data = $query->first();
@@ -137,6 +137,10 @@ class MainController extends Controller
          *  recordsFiltered : số bản ghi thỏa mãn điều kiện 
          * data : là mảng 2 chiều trong đó mỗi mảng 1 chiều con tương ứng với 1 hàng (row) trên bảng hiển thị phía người dùng .
          * */
+        $params = $request -> all();
+        $format = "Y-m-d H:i:s";
+        $fromDate = Carbon::parse($params["from_date"])->format($format);
+        $toDate = Carbon::parse($params["to_date"])->format($format);
         $fieldsSelected = ['ID', 'DateTime', 'Status', 'SKUID', 'ProductName', 'Line', 'Reject'];
         $draw = $request->draw; // draw là số thứ tự của request datatable . Nó dùng để khớp kết quả khi hàm onchange 10 lần có 10 request nhưng response gõ cuối cùng đến sớm hơn cái gõ trước đó
         $key = $request->search['value'];
@@ -153,6 +157,26 @@ class MainController extends Controller
 //                ->orWhere('mobile', 'like', '%' . $key . '%')
 //                ->orWhere('email', 'like', '%' . $key . '%');
         }
+        // todo Filter Nav---------------------------------
+        if (isset($params["from_date"]) && $params["from_date"] !== ""){
+            $records -> where("DateTime",">=", $fromDate);
+        }
+        if (isset($params["to_date"]) && $params["to_date"] !== ""){
+            $records -> where("DateTime","<=", $toDate);
+        }
+        if(isset($params["status"]) && $params["status"] !==""){
+            $records -> where("Status","<=", $params["status"]);
+
+        }
+        if(isset($params["line"]) && $params["line"] !==""){
+            $records -> where("Line","=", $params["line"]);
+
+        }
+        if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+            $records -> where("SKUID","=", $params["SKUID"]);
+
+        }
+
         $recordsFiltered = $records->count(); // recordsFiltered - tổng số record có trong tình huống đó
         $records = $records->skip($request->start)->take($request->length); // danh sách các record hiển thị trên màn hình
         // Order - sắp xếp ngược xuôi
