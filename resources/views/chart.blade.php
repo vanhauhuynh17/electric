@@ -360,12 +360,10 @@
                 <div class="input-group">
                   <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
                     <option selected value="">All</option>
-                    <option value="Kawa 1">Kawa 1</option>
-                    <option value="Kawa 2">Kawa 2</option>
-                    <option value="Mespack 1">Mespack 1</option>
-                    <option value="Mespack 2">Mespack 2</option>
-                    <option value="Mespack  3">Mespack 3</option>
-                    <option value="Demar">Demar</option>
+                    @foreach($data["lines"] as $line)
+                      <option value="{{$line->Line}}">{{$line->Line}}</option>
+                    @endforeach
+                   
                   </select>
                   <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
                 </div>
@@ -379,12 +377,16 @@
 
               <li class="nav-item">
                 <select name="status" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
+                  
                   <option selected value="">All</option>
-                  <option value="Good">Good</option>
+                  @foreach ($data["statuses"] as $s)
+                  <option value="{{$s->Status}}">{{$s->Status}}</option>
+                  @endforeach
+                  <!-- <option value="Good">Good</option>
                   <option value="NoRead">NoRead</option>
                   <option value="Wrong">Wrong</option>
                   <option value="Noready">Noready</option>
-                  <option value="Unknow">Unknow</option>
+                  <option value="Unknow">Unknow</option> -->
                 </select>
               </li>
 

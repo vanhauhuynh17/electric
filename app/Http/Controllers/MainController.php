@@ -32,7 +32,15 @@ class MainController extends Controller
     public function index()
     {
         $baseURL =env('BASE_URL');
-    $data = ["base_url"=> $baseURL];
+        $statuses = DB::table("Table_StatusCamera")->get();
+        $lines = DB::table("Table_LineName")->get();
+        // dd($statuses);
+        $data = [
+            "base_url"=> $baseURL,
+            "statuses" => $statuses,
+            "lines" => $lines
+        ];
+        
   
         return view('chart', ['data'=>$data]);
     }
