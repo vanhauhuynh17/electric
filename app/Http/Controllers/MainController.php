@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Session;
 
 use App\Exports\UsersExport;
+use App\Exports\DatamanExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -72,7 +73,7 @@ class MainController extends Controller
         $query = DB::table("Table_ResultDataman")
         ->select(
             DB::raw("COUNT( (CASE WHEN Status='Good' THEN ID END)) 'Good'"),
-            DB::raw("COUNT( (CASE WHEN Status='Wrong' THEN ID END)) 'WrongCode'"),
+            DB::raw("COUNT( (CASE WHEN Status='WrongCode' THEN ID END)) 'WrongCode'"),
             DB::raw("COUNT( (CASE WHEN Status='No Read' THEN ID END)) 'NoRead'"),
             DB::raw("COUNT( (CASE WHEN Status='Unknow' THEN ID END)) 'Unknow'")
         );
@@ -213,7 +214,20 @@ class MainController extends Controller
 
     public function exportData(Request $request){
         // todo:Export excel ------------
-        return Excel::download(new UsersExport, 'users.xlsx');
+        // dd(123);
+        return Excel::create('dataman', function($excel) {
+
+            $excel->sheet('Dataman', function($sheet) {
+        
+                $sheet->fromArray(array(
+                    array('data1', 'data2'),
+                    array('data3', 'data4')
+                ));
+        
+            });
+        
+        })->export('xlsx');
+        return Excel::download(new DatamanExport($request), 'dataman.xlsx');
 
         // end: Export Excel------------
 
@@ -225,7 +239,6 @@ class MainController extends Controller
         $format = "Y-m-d H:i:s";
        
       
-
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $query = DB::table("Table_ResultDataman");
