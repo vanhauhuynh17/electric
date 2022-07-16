@@ -213,76 +213,31 @@ class MainController extends Controller
     }
 
     public function exportData(Request $request){
-        // todo:Export excel ------------
-        // dd(123);
-        return Excel::create('dataman', function($excel) {
-
-            $excel->sheet('Dataman', function($sheet) {
-        
-                $sheet->fromArray(array(
-                    array('data1', 'data2'),
-                    array('data3', 'data4')
-                ));
-        
-            });
-        
-        })->export('xlsx');
-        return Excel::download(new DatamanExport($request), 'dataman.xlsx');
-
-        // end: Export Excel------------
-
-
-
-
-
-        $params = $request->all();
-        $format = "Y-m-d H:i:s";
-       
-      
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $query = DB::table("Table_ResultDataman");
-      
-        if (isset($params["from_date"]) && $params["from_date"] !== ""){
-            $fromDate = Carbon::parse($params["from_date"])->format($format);
-            $query -> where("DateTime",">=", $fromDate);
-        }
-        if (isset($params["to_date"]) && $params["to_date"] !== ""){
-            $toDate = Carbon::parse($params["to_date"])->format($format);
-            $query -> where("DateTime","<=", $toDate);
-        }
-        if(isset($params["status"]) && $params["status"] !==""){
-            $query -> where("Status","=", $params["status"]);
-
-        }
-        if(isset($params["line"]) && $params["line"] !==""){
-            $query -> where("Line","=", $params["line"]);
-
-        }
-        if(isset($params["SKUID"]) && $params["SKUID"] !==""){
-            $query -> where("SKUID","=", $params["SKUID"]);
-
-        }
-        $data = $query->get();
-        $i = 2;
-       
-        $sheet->setCellValue('A1', 'DateTime');
-       
+        $sheet->setCellValue('A1', 'DateTime');       
         $sheet->setCellValue('B1', 'SKUID');
         $sheet->setCellValue('C1', 'ProductName');
         $sheet->setCellValue('D1', 'Barcode');
         $sheet->setCellValue('E1', 'Status');
-        // dd("DATA: ", $data);
-        foreach($data as $key => $value){
-            $date = Carbon::parse($value->DateTime)->format("d/m/Y H:i");
-            $sheet->setCellValue("A$i", $date);        
-            $sheet->setCellValue("B$i", $value->SKUID);
-            $sheet->setCellValue("C$i", $value->ProductName);
-            $sheet->setCellValue("D$i", $value->Barcode);
-            $sheet->setCellValue("E$i", $value->Status);
-            $i++;
-        }
 
+        $now = Carbon::now();
+        $time =  $now->format("Y_m_d__H_i_s");
+        $filepath = str_replace(__FILE__,'dataman.xlsx',__FILE__);
+        $filepath = "C://Report/dataman_$time.xlsx";
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->setPreCalculateFormulas(false);
+        return $writer->save("$filepath");
+     
+        $params = $request->all();
+        $format = "Y-m-d H:i:s";
+       
+ 
+        // $query = DB::table("Table_ResultDataman");
+        if (count($params) == 0){
+            return "false";
+        }
+          $sheet->setCellValue('A1', 'DateTime');
         $writer = new Xlsx($spreadsheet);
         $fileName = "dataman.xlsx";
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -291,38 +246,58 @@ class MainController extends Controller
         foreach (range('A', 'E') as $columnId) {
             $sheet->getColumnDimension($columnId)->setAutoSize(true);
             }
-        return $writer->save('php://output');
-        // return $writer ->save(base_path('test.xlsx'));
-        // $provinces = Province::with('districts')->get();
-        $objPHPExcel = new \PHPExcel();
-        // foreach ($provinces as $key => $province) {
-            $objPHPExcel->createSheet(); // tạo 1 sheet mới
-            $activeSheet = $objPHPExcel->setActiveSheetIndex($key);
-            $activeSheet->setTitle($province->name); // đặt tên sheet là tên tỉnh
-            $activeSheet->setCellValue('A1', 'Quận/Huyện')
-                ->setCellValue('B1', 'Xã/Phường')
-                ->setCellValue('C1', 'Kinh độ, vĩ độ'); // set title cho dòng đầu tiên
-            $i = 2;
-            $j = 2;
-            // foreach ($province->districts as $district) {
-                $activeSheet->setCellValue("A$i", $district->type . ' ' . $district->name); // set tên quận/huyện
-                // foreach ($district->wards as $ward) {
-                    $activeSheet->setCellValue("B$j", $ward->type . ' ' . $ward->name); // tương ứng mỗi quận huyện set tên xã/phường
-                    $activeSheet->setCellValue("C$j", $ward->location);
-                    $j++;
-                // }
-                $rowMerge = $j - 1;
-                if ($i < $rowMerge) {
-                    $activeSheet->mergeCells("A$i:A$rowMerge"); // merge các cell có cùng 1 quận/huyện
-                }
-                $i = $j;
-            // }
-            
-            // foreach (range('A', 'C') as $columnId) {
-                $activeSheet->getColumnDimension($columnId)->setAutoSize(true);
-            // }
+        return $writer->save('test.xlsx');
+       
+      
+        // if (isset($params["from_date"]) && $params["from_date"] !== ""){
+        //     $fromDate = Carbon::parse($params["from_date"])->format($format);
+        //     $query -> where("DateTime",">=", $fromDate);
         // }
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save(base_path('result.xlsx'));
+        // if (isset($params["to_date"]) && $params["to_date"] !== ""){
+        //     $toDate = Carbon::parse($params["to_date"])->format($format);
+        //     $query -> where("DateTime","<=", $toDate);
+        // }
+        // if(isset($params["status"]) && $params["status"] !==""){
+        //     $query -> where("Status","=", $params["status"]);
+
+        // }
+        // if(isset($params["line"]) && $params["line"] !==""){
+        //     $query -> where("Line","=", $params["line"]);
+
+        // }
+        // if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+        //     $query -> where("SKUID","=", $params["SKUID"]);
+
+        // }
+        // $data = $query->get();
+        // $i = 2;
+       
+        // $sheet->setCellValue('A1', 'DateTime');
+       
+        // $sheet->setCellValue('B1', 'SKUID');
+        // $sheet->setCellValue('C1', 'ProductName');
+        // $sheet->setCellValue('D1', 'Barcode');
+        // $sheet->setCellValue('E1', 'Status');
+        // // dd("DATA: ", $data);
+        // foreach($data as $key => $value){
+        //     $date = Carbon::parse($value->DateTime)->format("d/m/Y H:i");
+        //     $sheet->setCellValue("A$i", $date);        
+        //     $sheet->setCellValue("B$i", $value->SKUID);
+        //     $sheet->setCellValue("C$i", $value->ProductName);
+        //     $sheet->setCellValue("D$i", $value->Barcode);
+        //     $sheet->setCellValue("E$i", $value->Status);
+        //     $i++;
+        // }
+
+        // $writer = new Xlsx($spreadsheet);
+        // $fileName = "dataman.xlsx";
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        // $output = "test.xlsx";
+        // foreach (range('A', 'E') as $columnId) {
+        //     $sheet->getColumnDimension($columnId)->setAutoSize(true);
+        //     }
+        // return $writer->save('test.xlsx');
+       
     }
 }
