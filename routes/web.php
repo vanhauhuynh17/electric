@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AuthLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/index','MainController@index');
+Route::get('/index','MainController@index') -> name("chart") -> middleware(AuthLogin::class);;
 Route::post('/filter','MainController@filter') -> name("filter-chartfilter-chart");
 Route::get('/login','MainController@login') -> name("login");
 Route::get('/logout','MainController@logout') -> name("logout");

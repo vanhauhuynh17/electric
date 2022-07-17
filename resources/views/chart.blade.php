@@ -488,230 +488,206 @@ stuff <a href="#">link</a>
     </div>
     <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
-  <!-- base:js -->
-  <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  @include('lib.js.vendor-bundle-base')
-  <!-- endinject -->
-  <!-- inject:js -->
-  <script src="assets/js/off-canvas.js"></script>
-  <script src="assets/js/hoverable-collapse.js"></script>
-  <script src="assets/js/template.js"></script>
-  <script src="assets/js/settings.js"></script>
-  <script src="assets/js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- plugin js for this page -->
-  <script src="assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="assets/vendors/select2/select2.min.js"></script>
-  <!-- End plugin js for this page -->
-  <!-- Custom js for this page-->
-  <script src="assets/js/file-upload.js"></script>
-  <script src="assets/js/typeahead.js"></script>
-  <script src="assets/js/select2.js"></script>
-  <!-- End custom js for this page-->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
-
-
-
-  <script type="text/javascript">
-    // todo: GLOBAL-------------------------
-    var table;
-    window.baseURL = "{{$data['base_url']}}";
-    google.charts.load("current", {
-      packages: ["corechart"]
-    });
-    google.charts.setOnLoadCallback(drawChart);
-    var chart;
-    var options;
-    // end:GLOBAL------------------------
-
-    function handleData(oData) {
-      // todo: Config------------
-      console.log("HANDLE DATA: ", oData);
-      const title = "Status report statistics";
-      const task = ["Task", "Status report statistics"];
-      const types = [];
-      for (key in oData) {
-        const ob = {
-          "Status": key,
-          "Quantity": oData[key]
-        };
-
-        types.push(ob);
-
-      }
-      let count_total = 0;
-      for (key in oData) {
-        $("#" + key).text(oData[key]);
-        count_total += parseInt(oData[key]);
-
-      }
-
-      // oData.forEach(e=>e["Quantity"] = parseFloat(e["Quantity"])/parseFloat(count_total));
-      $("#count_total").text(count_total);
-
-      // todo: Detail Data----------
-      if (table) {
-        table.destroy()
-      }
-      // table.destroy();
-      table = $('#table-detail-data').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-          "type": "GET",
-          "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
-          data: function(d) {
-
-            // d["params"] = JSON.parse($("#form-data").serialize());
-            // d.custom = $('#myInput').val();
-            // etc
-          },
-
-
-        }
-
-      });
-
-      // Config---------------------
-
-
-      let drawData = types.map(e => [e.Status, Math.round(e.Quantity / count_total * 100)]);
-
-      drawData.unshift(task);
-
-      console.log("DRAW DATA: ", drawData);
-      var data = google.visualization.arrayToDataTable(drawData);
-      var options = {
-        title: title,
-        is3D: true,
-      };
-      chart.draw(data, options);
-
-      let str = "";
-      $("#total").text(oData.length);
-
-    }
-
-    function drawChart() {
-      var data1 = [];
-      // todo: Config------------
-      const title = "Status report statistics";
-      const task = ["Task", "Status report statistics"];
-      const types = [{
-          "Status": "Good",
-          "Quantity": 0
-        },
-        {
-          "Status": "Wrong",
-          "Quantity": 0
-        },
-        {
-          "Status": "NoRead",
-          "Quantity": 0
-        }
-
-      ];
-      // Config---------------------
-
-
-      const drawData = types.map(e => [e.Status, e.Quantity]);
-      drawData.unshift(task);
-      console.log("DRAWWWWW: ", drawData);
-      chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-      var data = google.visualization.arrayToDataTable(drawData);
-      var options = {
-        title: title,
-        is3D: true,
-      };
-
-
-      chart.draw(data, options);
-
-      //todo: Load Ddata---------
-      let str = "";
-      types.forEach(e => {
-        const tr = `<tr>
-              <td>${e.Status}</td> 
-              <td>${e.Quantity}</td> 
-            </tr>`;
-        str += tr;
-
-      });
-      $("#total").text(data1.length);
-      // $("#table-data tbody").html(str);
-
-    }
-
-    $("#btn-report").click(function(e) {
-      e.preventDefault();
-      $(".loading").css("display", "block");
-      setTimeout(()=>{
-        processReport();
-      },100);
-    });
-    table.destroy();
-    function processReport(){
-        $.ajax({
-          url: "{{$data['base_url']}}" + "/get-data",
-          type: 'POST',
-          dataType: "json",
-          data: $("#form-data").serialize()
-        }).done(function(data) {
-          handleData(data);
-          $(".loading").toggle();
-        });
-    }
-    function processExport(){
-      $.ajax({
-        url: "{{$data['base_url']}}" + "/export-data",
-        type: 'GET',
-        dataType: "json",
-        async: false,
-        data: $("#form-data").serialize(),
-        success: function(data) {
-          if (data.error) {           
-                    $(".loading").toggle();
-                  Swal.fire(
-                    'Export failed !',
-                    data.message,
-                    'error'
-                  )          
-           
-          } else {          
-                  $(".loading").toggle();
-                  Swal.fire(
-                    'Export Successfully !',
-                    data.message,
-                    'success'
-                  )           
-           
-          }
-        }
-      });
-    }
-    function exportData() {
-      $(".loading").css("display", "block");
-      setTimeout(()=>{
-        processExport();
-      }, 100);
-    
-    
-  
-    
-
-
-    }
-
-
-    $(document).ready(function() {
-    
-    });
-  </script>
-</body>
-
-</html>
 @endsection
+
+@section("after_script")
+
+
+<script type="text/javascript">
+  // todo: GLOBAL-------------------------
+  var table;
+  window.baseURL = "{{$data['base_url']}}";
+  google.charts.load("current", {
+    packages: ["corechart"]
+  });
+  google.charts.setOnLoadCallback(drawChart);
+  var chart;
+  var options;
+  // end:GLOBAL------------------------
+
+  function handleData(oData) {
+    // todo: Config------------
+    console.log("HANDLE DATA: ", oData);
+    const title = "Status report statistics";
+    const task = ["Task", "Status report statistics"];
+    const types = [];
+    for (key in oData) {
+      const ob = {
+        "Status": key,
+        "Quantity": oData[key]
+      };
+
+      types.push(ob);
+
+    }
+    let count_total = 0;
+    for (key in oData) {
+      $("#" + key).text(oData[key]);
+      count_total += parseInt(oData[key]);
+
+    }
+
+    // oData.forEach(e=>e["Quantity"] = parseFloat(e["Quantity"])/parseFloat(count_total));
+    $("#count_total").text(count_total);
+
+    // todo: Detail Data----------
+    if (table) {
+      table.destroy()
+    }
+    // table.destroy();
+    table = $('#table-detail-data').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        "type": "GET",
+        "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
+        data: function(d) {
+
+          // d["params"] = JSON.parse($("#form-data").serialize());
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+
+
+      }
+
+    });
+
+    // Config---------------------
+
+
+    let drawData = types.map(e => [e.Status, Math.round(e.Quantity / count_total * 100)]);
+
+    drawData.unshift(task);
+
+    console.log("DRAW DATA: ", drawData);
+    var data = google.visualization.arrayToDataTable(drawData);
+    var options = {
+      title: title,
+      is3D: true,
+    };
+    chart.draw(data, options);
+
+    let str = "";
+    $("#total").text(oData.length);
+
+  }
+
+  function drawChart() {
+    var data1 = [];
+    // todo: Config------------
+    const title = "Status report statistics";
+    const task = ["Task", "Status report statistics"];
+    const types = [{
+        "Status": "Good",
+        "Quantity": 0
+      },
+      {
+        "Status": "Wrong",
+        "Quantity": 0
+      },
+      {
+        "Status": "NoRead",
+        "Quantity": 0
+      }
+
+    ];
+    // Config---------------------
+
+
+    const drawData = types.map(e => [e.Status, e.Quantity]);
+    drawData.unshift(task);
+    console.log("DRAWWWWW: ", drawData);
+    chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    var data = google.visualization.arrayToDataTable(drawData);
+    var options = {
+      title: title,
+      is3D: true,
+    };
+
+
+    chart.draw(data, options);
+
+    //todo: Load Ddata---------
+    let str = "";
+    types.forEach(e => {
+      const tr = `<tr>
+            <td>${e.Status}</td> 
+            <td>${e.Quantity}</td> 
+          </tr>`;
+      str += tr;
+
+    });
+    $("#total").text(data1.length);
+    // $("#table-data tbody").html(str);
+
+  }
+
+  $("#btn-report").click(function(e) {
+    e.preventDefault();
+    $(".loading").css("display", "block");
+    setTimeout(()=>{
+      processReport();
+    },100);
+  });
+  table.destroy();
+  function processReport(){
+      $.ajax({
+        url: "{{$data['base_url']}}" + "/get-data",
+        type: 'POST',
+        dataType: "json",
+        data: $("#form-data").serialize()
+      }).done(function(data) {
+        handleData(data);
+        $(".loading").toggle();
+      });
+  }
+  function processExport(){
+    $.ajax({
+      url: "{{$data['base_url']}}" + "/export-data",
+      type: 'GET',
+      dataType: "json",
+      async: false,
+      data: $("#form-data").serialize(),
+      success: function(data) {
+        if (data.error) {           
+                  $(".loading").toggle();
+                Swal.fire(
+                  'Export failed !',
+                  data.message,
+                  'error'
+                )          
+         
+        } else {          
+                $(".loading").toggle();
+                Swal.fire(
+                  'Export Successfully !',
+                  data.message,
+                  'success'
+                )           
+         
+        }
+      }
+    });
+  }
+  function exportData() {
+    $(".loading").css("display", "block");
+    setTimeout(()=>{
+      processExport();
+    }, 100);
+  
+  
+
+  
+
+
+  }
+
+
+  $(document).ready(function() {
+  
+  });
+</script>
+@endsection
+

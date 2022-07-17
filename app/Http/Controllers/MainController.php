@@ -24,7 +24,11 @@ class MainController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function login(){
-        return view('login');
+        $baseURL =env('BASE_URL');
+        $data = [
+            "base_url" => $baseURL
+        ];
+        return view('login', ['data' => $data]);
     }
     public function logout(){
         Session::forget("user");
@@ -54,8 +58,17 @@ class MainController extends Controller
        if($check>0){
         $user = $query->first();
         Session::put("user",$user);
-        return redirect(route("chart"));
+        return response()->json([
+            'error' => 0,
+            'message' => 'Login successfully !',
+        ]);
+     
+        // return redirect(route("chart"));
        }
+       return response()->json([
+        'error' => 1,
+        'message' => 'Username or password not corectly !',
+    ]);
 
 
 

@@ -1,6 +1,11 @@
 @extends('layouts.master')
 @section('content')
-
+<style>
+  .error{
+    color:red;
+    display:none;
+  }
+</style>
 <div class="container-scroller">
   <div class="container-fluid page-body-wrapper full-page-wrapper">
     <div class="content-wrapper d-flex align-items-center auth px-0">
@@ -21,7 +26,10 @@
                 <input name="password" type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password">
               </div>
               <div class="mt-3">
-                <buttonIN onclick="submitLogin()" type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >SIGN IN</button>
+               <label class="error"> Username or password not correctly ! </label>
+              </div>
+              <div class="mt-3">
+                <button onclick="submitLogin()" type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >SIGN IN</button>
               </div>
               <div class="my-2 d-flex justify-content-between align-items-center">
                 <div class="form-check">
@@ -56,12 +64,21 @@
 <script>
   function submitLogin(){
     $.ajax({
-          url: "{{route('post-login')}}",
+          url: "{{$data['base_url']}}/login",
           type: 'POST',
           dataType: "json",
-          data: $("#form-data").serialize()
+          data:{
+              username: $("[name='username']").val(),
+              password:$("[name='password']").val()
+          }
         }).done(function(data) {
-          handleData(data);
+          if(data.error){
+            $(".error").css("display", "block");
+          }
+          else{
+            $(".error").css("display", "none");
+            window.location.href = "/index";
+          }
           $(".loading").toggle();
         });
     }
