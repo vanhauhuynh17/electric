@@ -213,6 +213,22 @@ class MainController extends Controller
     }
 
     public function exportData(Request $request){
+
+        $params = $request->all();
+        
+        if(!$params["from_date"]) {
+            return response()->json([
+                'error' => 1,
+                'message' => 'From Date  required !',
+            ]);
+        }
+        if(!$params["to_date"]) {
+            return response()->json([
+                'error' => 1,
+                'message' => 'To Date  required !',
+            ]);
+        }
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'DateTime');       
@@ -224,20 +240,23 @@ class MainController extends Controller
         $now = Carbon::now();
         $time =  $now->format("Y_m_d__H_i_s");
         $filepath = str_replace(__FILE__,'dataman.xlsx',__FILE__);
-        $filepath = "C://Report/dataman_$time.xlsx";
+        $filename = "dataman_$time.xlsx";
+        $filepath = "C://Report/$filename";
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
-        return $writer->save("$filepath");
+         $writer->save("$filepath");
+         return response()->json([
+            'error' => 0,
+            'message' => "$filename has been saved in C://Report !",
+        ]);
      
         $params = $request->all();
         $format = "Y-m-d H:i:s";
        
  
         // $query = DB::table("Table_ResultDataman");
-        if (count($params) == 0){
-            return "false";
-        }
-          $sheet->setCellValue('A1', 'DateTime');
+      
+        $sheet->setCellValue('A1', 'DateTime');
         $writer = new Xlsx($spreadsheet);
         $fileName = "dataman.xlsx";
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

@@ -14,12 +14,7 @@
   @include('lib.css.bendor-bundle-base') 
 
   <!-- <link rel="stylesheet" href="assets/vendors/typicons/typicons.css"> -->
-  <!-- <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css"> -->
-  <!-- endinject -->
-  <!-- plugin css for this page -->
-  <link rel="stylesheet" href="assets/vendors/select2/select2.min.css">
-  <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-  <!-- End plugin css for this page -->
+  <!-- <link rel="stylesheet" href="assets/vendors/cssheadin
   <!-- inject:css -->
   @include('lib.css.vertical-light-layout')
   <!-- <link rel="stylesheet" href="assets/css/vertical-layout-light/style.css"> -->
@@ -417,14 +412,13 @@
                   </ul>
                 </div>
               </li>
-
-              <li class="nav-item">
-                <a href="{{route('export-data')}}" class="export-excel menu-title">
-                  Export Excel
+            
+              <li class="nav-item cursor-pointer" style="cursor:pointer">
+             
+                  <span onclick="exportData()"> Export Excel </span>
                   <img style="width:30px" src="assets/images/word.png" />
-                </a>
+  </button>
               </li>
-
             </ul>
           </nav>
       </form>
@@ -553,6 +547,7 @@
   <!-- container-scroller -->
   <!-- base:js -->
   <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   @include('lib.js.vendor-bundle-base') 
   <!-- endinject -->
   <!-- inject:js -->
@@ -725,9 +720,48 @@
 
     table.destroy();
 
+    function exportData(){
+      $.ajax({
+        url: "{{$data['base_url']}}" + "/export-data",
+        type: 'GET',
+        dataType: "json",
+        async:false,
+        data: $("#form-data").serialize(),
+        success:function(data){
+           if(data.error){
+            Swal.fire(
+              'Export failed !',
+              data.message,
+              'error'
+            )
+           }
+           else{
+            Swal.fire(
+              'Export Successfully !',
+              data.message,
+              'success'
+            )
+           }
+
+
+        }
+      });
+      // Swal.fire(
+      //         'Export Successfully !',
+      //         '',
+      //         'success'
+      //       )
+
+
+    }
+
 
     $(document).ready(function() {
       // table = $('#table-detail-data').DataTable();
+       
+        if(reload){
+          alert(123);
+        }
     });
   </script>
 </body>
