@@ -262,7 +262,9 @@ class MainController extends Controller
         $sheet->setCellValue('D1', 'ProductName');
         $sheet->setCellValue('E1', 'Line');
         $sheet->setCellValue('F1', 'Reject');
-       
+         foreach (range('A', 'F') as $columnId) {
+            $sheet->getColumnDimension($columnId)->setAutoSize(true);
+            }
 
         $i = 2; 
         foreach($data as $key => $value){
