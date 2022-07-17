@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>PolluxUI Admin</title>
   <!-- base:css -->
-  
-  @include('lib.css.typicons') 
 
-  @include('lib.css.bendor-bundle-base') 
+  @include('lib.css.typicons')
+
+  @include('lib.css.bendor-bundle-base')
 
   <!-- <link rel="stylesheet" href="assets/vendors/typicons/typicons.css"> -->
   <!-- <link rel="stylesheet" href="assets/vendors/cssheadin
@@ -54,16 +54,147 @@
   </style>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style>
     .content-wrapper {
       padding: 1rem !important;
     }
   </style>
+
+
+<style type="text/css">
+
+
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  display:none;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.5);
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+  /* hide "loading..." text */
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.loading:not(:required):after {
+  content: '';
+  display: block;
+  font-size: 10px;
+  width: 100px;
+  height: 100px;
+  margin-top: -0.5em;
+
+  border: 15px solid rgba(33, 150, 243, 1.0);
+  border-radius: 100%;
+  border-bottom-color: transparent;
+  -webkit-animation: spinner 1s linear 0s infinite;
+  animation: spinner 1s linear 0s infinite;
+
+
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+</style>
 </head>
 
 <body>
 
+
+<div class="loading">Loading&#8230;</div>
+stuff <a href="#">link</a>
+ 
   <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -72,7 +203,7 @@
           <a class="navbar-brand brand-logo" href="../../index.html"><img src="assets/images/logo.svg" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images/logo-mini.svg" alt="logo" /></a>
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="typcn typcn-th-menu"></span>
+            <span class="fa fa-bars"></span>
           </button>
         </div>
       </div>
@@ -89,7 +220,7 @@
             <!-- <a class="nav-link d-flex justify-content-center align-items-center" href="javascript:;"> -->
             <a href="{{route('logout')}}" class="date mb-0 btn-logout">Đăng xuất</a>
             <!-- <i class="typcn typcn-calendar"></i> -->
-            <i class="typcn typcn-cog-outline mx-0"></i>
+            <i class=" ml-3 fa fa-user-circle"></i>
             <!-- </a> -->
           </li>
 
@@ -320,112 +451,115 @@
       </div>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
-    
+
       <form method="get" id="form-data">
-      <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
-          <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-              <li class="nav-item">
-                <span class="menu-title">Từ ngày</span>
+        <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="nav-item">
+              <span class="menu-title">Từ ngày</span>
 
-              </li>
+            </li>
 
-              <li class="nav-item">
+            <li class="nav-item">
 
-                <input class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
+              <input class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
 
-              </li>
+            </li>
 
-              <li class="nav-item">
-                <span class="menu-title">Đến ngày</span>
-              </li>
+            <li class="nav-item">
+              <span class="menu-title">Đến ngày</span>
+            </li>
 
-              <li class="nav-item">
+            <li class="nav-item">
 
-                <input class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
+              <input class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
 
-              </li>
-
-              
-              <li class="nav-item">
-                Line
-              </li>
-
-              <li class="nav-item">
-                <div class="input-group">
-                  <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
-                    <option selected value="">All</option>
-                    @foreach($data["lines"] as $line)
-                      <option value="{{$line->Line}}">{{$line->Line}}</option>
-                    @endforeach
-                   
-                  </select>
-                  <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
-                </div>
-
-              </li>
+            </li>
 
 
-              <li class="nav-item">
-                Status
-              </li>
+            <li class="nav-item">
+              Line
+            </li>
 
-              <li class="nav-item">
-                <select name="status" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
-                  
+            <li class="nav-item">
+              <div class="input-group">
+                <select name="line" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
                   <option selected value="">All</option>
-                  @foreach ($data["statuses"] as $s)
-                  <option value="{{$s->Status}}">{{$s->Status}}</option>
+                  @foreach($data["lines"] as $line)
+                  <option value="{{$line->Line}}">{{$line->Line}}</option>
                   @endforeach
-                  <!-- <option value="Good">Good</option>
+
+                </select>
+                <!-- <input name="line" type="text" aria-label="First name" class="data-change form-control"> -->
+              </div>
+
+            </li>
+
+
+            <li class="nav-item">
+              Status
+            </li>
+
+            <li class="nav-item">
+              <select name="status" class="data-change form-select form-select-sm form-control" aria-label=".form-select-sm example">
+
+                <option selected value="">All</option>
+                @foreach ($data["statuses"] as $s)
+                <option value="{{$s->Status}}">{{$s->Status}}</option>
+                @endforeach
+                <!-- <option value="Good">Good</option>
                   <option value="NoRead">NoRead</option>
                   <option value="Wrong">Wrong</option>
                   <option value="Noready">Noready</option>
                   <option value="Unknow">Unknow</option> -->
-                </select>
-              </li>
+              </select>
+            </li>
 
-              <li class="nav-item">
-                SKUID
-              </li>
+            <li class="nav-item">
+              SKUID
+            </li>
 
-              <li class="nav-item">
-                <div class="input-group">
-                  <input name="skuid" type="text" aria-label="SKUID" class="data-change form-control">
-                </div>
+            <li class="nav-item">
+              <div class="input-group">
+                <input name="skuid" type="text" aria-label="SKUID" class="data-change form-control">
+              </div>
 
-              </li>
+            </li>
 
 
-              <li class="nav-item">
-                   
-                        <button type="submit"id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" data-toggle="collapse"aria-expanded="false" aria-controls="ui-basic">
-                          <i class="typcn typcn-document-text menu-icon"></i>
-                          <span class="menu-title">Reports</span>
+            <li class="nav-item">
 
-                        </button>
-                <div class="collapse" id="ui-basic">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                  </ul>
-                </div>
-              </li>
+              <button type="submit" id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic">
+                <i class="typcn typcn-document-text menu-icon"></i>
+                <span class="menu-title">Reports</span>
+
+              </button>
+              <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="nav-item cursor-pointer" style="cursor:pointer">
+
+              <div class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" onclick="exportData()">
+               Export Excel 
+               <img class="ml-auto" style="width:30px" src="assets/images/word.png" />
+</div>
             
-              <li class="nav-item cursor-pointer" style="cursor:pointer">
-             
-                  <span onclick="exportData()"> Export Excel </span>
-                  <img style="width:30px" src="assets/images/word.png" />
-  </button>
-              </li>
-            </ul>
-          </nav>
+              </button>
+            </li>
+          </ul>
+        </nav>
       </form>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
-        <div class="row">
+          <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -524,7 +658,7 @@
             </div>
 
           </div>
-      
+
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
@@ -548,7 +682,7 @@
   <!-- base:js -->
   <script src="assets/vendors/js/vendor.bundle.base.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  @include('lib.js.vendor-bundle-base') 
+  @include('lib.js.vendor-bundle-base')
   <!-- endinject -->
   <!-- inject:js -->
   <script src="assets/js/off-canvas.js"></script>
@@ -590,14 +724,14 @@
       const title = "Status report statistics";
       const task = ["Task", "Status report statistics"];
       const types = [];
-      for (key in oData){
+      for (key in oData) {
         const ob = {
           "Status": key,
-          "Quantity":oData[key]
+          "Quantity": oData[key]
         };
-      
+
         types.push(ob);
-      
+
       }
       let count_total = 0;
       for (key in oData) {
@@ -605,7 +739,7 @@
         count_total += parseInt(oData[key]);
 
       }
-    
+
       // oData.forEach(e=>e["Quantity"] = parseFloat(e["Quantity"])/parseFloat(count_total));
       $("#count_total").text(count_total);
 
@@ -618,27 +752,27 @@
         "processing": true,
         "serverSide": true,
         "ajax": {
-          "type":"GET",
-          "url": window.baseURL+"/get-datatable?"+$("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
-          data: function (d) {
-   
-                // d["params"] = JSON.parse($("#form-data").serialize());
-                // d.custom = $('#myInput').val();
-                // etc
-            },
+          "type": "GET",
+          "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
+          data: function(d) {
 
-        
+            // d["params"] = JSON.parse($("#form-data").serialize());
+            // d.custom = $('#myInput').val();
+            // etc
+          },
+
+
         }
-       
+
       });
 
       // Config---------------------
 
 
-      let drawData = types.map(e => [e.Status,Math.round(e.Quantity/count_total*100)]);
-      
+      let drawData = types.map(e => [e.Status, Math.round(e.Quantity / count_total * 100)]);
+
       drawData.unshift(task);
-     
+
       console.log("DRAW DATA: ", drawData);
       var data = google.visualization.arrayToDataTable(drawData);
       var options = {
@@ -704,64 +838,67 @@
 
     $("#btn-report").click(function(e) {
       e.preventDefault();
-      $.ajax({
-        url: "{{$data['base_url']}}" + "/get-data",
-        type: 'POST',
-        dataType: "json",
-        data: $("#form-data").serialize()
-      }).done(function(data) {
-        handleData(data);
-      });
-
+      $(".loading").css("display", "block");
+      setTimeout(()=>{
+        processReport();
+      },100);
     });
-    //       table = $('#example').DataTable( {
-    //     paging: false
-    // } );
-
     table.destroy();
-
-    function exportData(){
+    function processReport(){
+        $.ajax({
+          url: "{{$data['base_url']}}" + "/get-data",
+          type: 'POST',
+          dataType: "json",
+          data: $("#form-data").serialize()
+        }).done(function(data) {
+          handleData(data);
+          $(".loading").toggle();
+        });
+    }
+    function processExport(){
       $.ajax({
         url: "{{$data['base_url']}}" + "/export-data",
         type: 'GET',
         dataType: "json",
-        async:false,
+        async: false,
         data: $("#form-data").serialize(),
-        success:function(data){
-           if(data.error){
-            Swal.fire(
-              'Export failed !',
-              data.message,
-              'error'
-            )
-           }
-           else{
-            Swal.fire(
-              'Export Successfully !',
-              data.message,
-              'success'
-            )
-           }
-
-
+        success: function(data) {
+          if (data.error) {           
+                    $(".loading").toggle();
+                  Swal.fire(
+                    'Export failed !',
+                    data.message,
+                    'error'
+                  )          
+           
+          } else {          
+                  $(".loading").toggle();
+                  Swal.fire(
+                    'Export Successfully !',
+                    data.message,
+                    'success'
+                  )           
+           
+          }
         }
       });
-      // Swal.fire(
-      //         'Export Successfully !',
-      //         '',
-      //         'success'
-      //       )
+    }
+    function exportData() {
+      $(".loading").css("display", "block");
+      setTimeout(()=>{
+        processExport();
+      }, 100);
+    
+    
+  
+    
 
 
     }
 
 
     $(document).ready(function() {
-      // table = $('#table-detail-data').DataTable();
-       
-        if(reload){
-          alert(123);
-        }
+    
     });
   </script>
 </body>
