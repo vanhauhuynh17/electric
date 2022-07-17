@@ -215,6 +215,7 @@ class MainController extends Controller
     public function exportData(Request $request){
 
         $params = $request->all();
+        $format = "Y-m-d H:i:s";
         
         if(!$params["from_date"]) {
             return response()->json([
@@ -229,6 +230,30 @@ class MainController extends Controller
             ]);
         }
 
+        $query = DB::table("Table_ResultDataman");
+        if (isset($params["from_date"]) && $params["from_date"] !== ""){
+            $fromDate = Carbon::parse($params["from_date"])->format($format);
+            $query -> where("DateTime",">=", $fromDate);
+        }
+        if (isset($params["to_date"]) && $params["to_date"] !== ""){
+            $toDate = Carbon::parse($params["to_date"])->format($format);
+            $query -> where("DateTime","<=", $toDate);
+        }
+        if(isset($params["status"]) && $params["status"] !==""){
+            $query -> where("Status","=", $params["status"]);
+
+        }
+        if(isset($params["line"]) && $params["line"] !==""){
+            $query -> where("Line","=", $params["line"]);
+
+        }
+        if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+            $query -> where("SKUID","=", $params["SKUID"]);
+
+        }
+        $data = $query->get();
+
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'DateTime');       
@@ -236,6 +261,18 @@ class MainController extends Controller
         $sheet->setCellValue('C1', 'ProductName');
         $sheet->setCellValue('D1', 'Barcode');
         $sheet->setCellValue('E1', 'Status');
+
+        $i = 2; 
+        foreach($data as $key => $value){
+                $date = Carbon::parse($value->DateTime)->format("d/m/Y H:i");
+                $sheet->setCellValue("A$i", $date);        
+                $sheet->setCellValue("B$i", $value->SKUID);
+                $sheet->setCellValue("C$i", $value->ProductName);
+                $sheet->setCellValue("D$i", $value->Barcode);
+                $sheet->setCellValue("E$i", $value->Status);
+                $i++;
+        }
+    
 
         $now = Carbon::now();
         $time =  $now->format("Y_m_d__H_i_s");
