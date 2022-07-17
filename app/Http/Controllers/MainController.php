@@ -257,19 +257,23 @@ class MainController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'DateTime');       
-        $sheet->setCellValue('B1', 'SKUID');
-        $sheet->setCellValue('C1', 'ProductName');
-        $sheet->setCellValue('D1', 'Barcode');
-        $sheet->setCellValue('E1', 'Status');
+        $sheet->setCellValue('B1', 'Status');
+        $sheet->setCellValue('C1', 'SKUID');
+        $sheet->setCellValue('D1', 'ProductName');
+        $sheet->setCellValue('E1', 'Line');
+        $sheet->setCellValue('F1', 'Reject');
+       
 
         $i = 2; 
         foreach($data as $key => $value){
                 $date = Carbon::parse($value->DateTime)->format("d/m/Y H:i");
                 $sheet->setCellValue("A$i", $date);        
-                $sheet->setCellValue("B$i", $value->SKUID);
-                $sheet->setCellValue("C$i", $value->ProductName);
-                $sheet->setCellValue("D$i", $value->Barcode);
-                $sheet->setCellValue("E$i", $value->Status);
+                $sheet->setCellValue("B$i", $value->Status);
+                $sheet->setCellValue("C$i", $value->SKUID);
+                $sheet->setCellValue("D$i", $value->ProductName);
+                $sheet->setCellValue("E$i", $value->Line);
+                $sheet->setCellValue("F$i", $value->Reject);
+              
                 $i++;
         }
     
