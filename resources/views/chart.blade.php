@@ -339,7 +339,7 @@ stuff <a href="#">link</a>
 
             <li class="nav-item">
 
-              <button type="submit" id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic">
+              <button type="submit" id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic">
                 <i class="typcn typcn-document-text menu-icon"></i>
                 <span class="menu-title">Reports</span>
 
@@ -357,7 +357,7 @@ stuff <a href="#">link</a>
 
               <div class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" onclick="exportData()">
                Export Excel 
-               <img class="ml-auto" style="width:30px" src="assets/images/word.png" />
+               <img class="ml-auto" style="width:30px" src="assets/images/excel.png" />
 </div>
             
               </button>
@@ -539,6 +539,7 @@ stuff <a href="#">link</a>
     table = $('#table-detail-data').DataTable({
       "processing": true,
       "serverSide": true,
+      "searching": false,
       "ajax": {
         "type": "GET",
         "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
@@ -566,6 +567,8 @@ stuff <a href="#">link</a>
     var options = {
       title: title,
       is3D: true,
+      width: 700,
+      height: 700
     };
     chart.draw(data, options);
 
