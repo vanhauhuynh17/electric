@@ -694,8 +694,10 @@ stuff <a href="#">link</a>
   }
 
   function exportData(){
-   var mywindow =  window.open("https://75cb-123-30-64-66.ap.ngrok.io/export-data?" + $("#form-data").serialize());
-   myWindow.document.write("<h1>File is downloading ........ </h1>");
+    const url  = window.baseURL + "/export-data?" + $("#form-data").serialize();
+  //  var mywindow =  window.open(window.baseURL + "/export-data?" + $("#form-data").serialize());
+ var myWindow =  window.open(url, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+   myWindow.document.body.innerHTML = "<h1 style='font-size:100rem'>File is dowloading ........</h1>";
 
 
    
