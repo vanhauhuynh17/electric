@@ -12,8 +12,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Session;
 
 use App\Exports\UsersExport;
-use App\Exports\DatamanExport;
+use App\Exports\DatamanExpoßßrt;
 use Maatwebsite\Excel\Facades\Excel;
+use Redirect;
 
 
 class MainController extends Controller
@@ -226,6 +227,96 @@ class MainController extends Controller
     }
 
     public function exportData(Request $request){
+        // return Excel::store(new DatamanExport([]), 'invoices.xlsx', "report");
+        // todo: validate--------------
+        $params = $request->all();
+        $format = "Y-m-d H:i:s";
+        
+        if(!$params["from_date"]) {
+            return Redirect::back()->withErrors(['msg' => 'From Date required !']);
+        }
+        if(!$params["to_date"]) {
+            
+            return Redirect::back()->withErrors(['msg' => 'To Date required !']);
+        }
+
+        // $filename = "test.xlsx";
+        // $spreadsheet = new Spreadsheet();
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $sheet->setCellValue('A1', 'DateTime'); 
+        // $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        // $writer->setPreCalculateFormulas(false);
+
+
+// todo: Dataaaaa-------------------
+$query = DB::table("Table_ResultDataman");
+if (isset($params["from_date"]) && $params["from_date"] !== ""){
+    $fromDate = Carbon::parse($params["from_date"])->format($format);
+    $query -> where("DateTime",">=", $fromDate);
+}
+if (isset($params["to_date"]) && $params["to_date"] !== ""){
+    $toDate = Carbon::parse($params["to_date"])->format($format);
+    $query -> where("DateTime","<=", $toDate);
+}
+if(isset($params["status"]) && $params["status"] !==""){
+    $query -> where("Status","=", $params["status"]);
+
+}
+if(isset($params["line"]) && $params["line"] !==""){
+    $query -> where("Line","=", $params["line"]);
+
+}
+if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+    $query -> where("SKUID","=", $params["SKUID"]);
+
+}
+$data = $query->get();
+
+
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setCellValue('A1', 'DateTime');       
+$sheet->setCellValue('B1', 'Status');
+$sheet->setCellValue('C1', 'SKUID');
+$sheet->setCellValue('D1', 'ProductName');
+$sheet->setCellValue('E1', 'Line');
+$sheet->setCellValue('F1', 'Reject');
+ foreach (range('A', 'F') as $columnId) {
+    $sheet->getColumnDimension($columnId)->setAutoSize(true);
+    }
+
+$i = 2; 
+foreach($data as $key => $value){
+        $date = Carbon::parse($value->DateTime)->format("d/m/Y H:i");
+        $sheet->setCellValue("A$i", $date);        
+        $sheet->setCellValue("B$i", $value->Status);
+        $sheet->setCellValue("C$i", $value->SKUID);
+        $sheet->setCellValue("D$i", $value->ProductName);
+        $sheet->setCellValue("E$i", $value->Line);
+        $sheet->setCellValue("F$i", $value->Reject);
+      
+        $i++;
+}
+
+
+$now = Carbon::now();
+$time =  $now->format("Y_m_d__H_i_s");
+$filepath = str_replace(__FILE__,'dataman.xlsx',__FILE__);
+$filename = "dataman_$time.xlsx";
+$filepath = "C://Report/$filename";
+$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+$writer->setPreCalculateFormulas(false);
+//  $writer->save("$filepath");
+// end: Dataaaaaaaaaaaaaaaaaaa----------
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($filename).'"');
+        $writer->save('php://output');
+        // redirect(Request::url());
+       
+    }
+
+    public function old_exportData(Request $request){
 
         $params = $request->all();
         $format = "Y-m-d H:i:s";

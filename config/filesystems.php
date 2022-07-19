@@ -41,6 +41,11 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'report' => [
+            'driver' => 'local',
+            'root' => "C://Report",
+          
+        ],
 
         's3' => [
             'driver' => 's3',

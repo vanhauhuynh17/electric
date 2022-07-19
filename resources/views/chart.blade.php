@@ -272,7 +272,7 @@ stuff <a href="#">link</a>
 
             <li class="nav-item">
 
-              <input class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
+              <input requỉed class="w-100 data-change" type="datetime-local" id="from_date" name="from_date">
 
             </li>
 
@@ -282,7 +282,7 @@ stuff <a href="#">link</a>
 
             <li class="nav-item">
 
-              <input class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
+              <input required class="w-100 data-change" type="datetime-local" id="to_date" name="to_date">
 
             </li>
 
@@ -339,9 +339,9 @@ stuff <a href="#">link</a>
 
             <li class="nav-item">
 
-              <button type="submit" id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic">
-                <i class="typcn typcn-document-text menu-icon"></i>
-                <span class="menu-title">Reports</span>
+              <button type="submit" id="btn-report" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100 px-4" data-toggle="collapse" aria-expanded="false" aria-controls="ui-basic">
+                {{-- <i class="typcn typcn-document-text menu-icon"></i> --}}
+                <span class="menu-title float-left">Reports</span>
 
               </button>
               <div class="collapse" id="ui-basic">
@@ -355,12 +355,12 @@ stuff <a href="#">link</a>
 
             <li class="nav-item cursor-pointer" style="cursor:pointer">
 
-              <div class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold" onclick="exportData()">
-               Export Excel 
-               <img class="ml-auto" style="width:30px" src="assets/images/excel.png" />
-</div>
-            
+              <button href="javascript.void(0)" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100 px-4" onclick="exportData()">
+                Export Excel 
+                <img class="ml-auto" style="width:30px" src="assets/images/excel.png" />
               </button>
+            
+           
             </li>
           </ul>
         </nav>
@@ -368,6 +368,24 @@ stuff <a href="#">link</a>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
+          <div class="row">
+              <div class="col-md-12 col-12">
+                <div class="card">
+                  <div class="card-body">
+                    @if(count($errors)>0)
+                    @foreach ($errors->all() as $e)
+                    <h4 class="alert alert-danger">{{$e}}</h4>
+
+                    @endforeach
+                    @php
+                       \Session::flush('errors');
+                @endphp
+                    @endif
+                  </div>
+                </div>
+              </div>
+
+          </div>
           <div class="row">
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
@@ -674,18 +692,22 @@ stuff <a href="#">link</a>
       }
     });
   }
-  function exportData() {
-    $(".loading").css("display", "block");
-    setTimeout(()=>{
-      processExport();
-    }, 100);
-  
-  
 
-  
+  function exportData(){
+   var mywindow =  window.open("https://75cb-123-30-64-66.ap.ngrok.io/export-data?" + $("#form-data").serialize());
+   myWindow.document.write("<h1>File is downloading ........ </h1>");
 
 
+   
   }
+  // function exportData() {
+  //   $(".loading").css("display", "block");
+  //   setTimeout(()=>{
+  //     processExport();
+  //   }, 100);
+  
+
+  // }
 
 
   $(document).ready(function() {
