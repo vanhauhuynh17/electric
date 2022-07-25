@@ -233,17 +233,20 @@ class MainController extends Controller
     public function exportData(Request $request){
         // return Excel::store(new DatamanExport([]), 'invoices.xlsx', "report");
         // todo: validate--------------
+  
         $params = $request->all();
+        // return "123";
         $format = "Y-m-d H:i:s";
-        
-        if(!$params["from_date"]) {
+        // dd($params);
+        // return $params;
+        if(!isset($params["from_date"])) {
             return Redirect::back()->withErrors(['msg' => 'From Date required !']);
         }
-        if(!$params["to_date"]) {
+        if(!isset($params["to_date"])) {
             
             return Redirect::back()->withErrors(['msg' => 'To Date required !']);
         }
-
+        
         // $filename = "test.xlsx";
         // $spreadsheet = new Spreadsheet();
         // $sheet = $spreadsheet->getActiveSheet();
@@ -323,6 +326,7 @@ $writer->setPreCalculateFormulas(false);
     public function old_exportData(Request $request){
 
         $params = $request->all();
+        return var_dump($params);
         $format = "Y-m-d H:i:s";
         
         if(!$params["from_date"]) {

@@ -27,5 +27,5 @@ Route::group(['prefix'=>'electric'], function(){
     Route::post('/login','MainController@postLogin') -> name("post-login");
     Route::post('/get-data','MainController@getData') -> name("get-data");
     Route::post('/get-datatable','MainController@getDatatable') -> name("get-datatable");
-    Route::get('/export-data','MainController@exportData') -> name("export-data");
+    Route::post('/export-data','MainController@exportData') -> name("export-data");
 });

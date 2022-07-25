@@ -261,7 +261,7 @@ stuff <a href="#">link</a>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
 
-      <form method="get" id="form-data">
+      <form action="{{route('export-data')}}" method="post" id="form-data">
         <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
@@ -355,15 +355,18 @@ stuff <a href="#">link</a>
 
             <li class="nav-item cursor-pointer" style="cursor:pointer">
 
-              <button href="javascript.void(0)" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100 px-4" onclick="exportData()">
+              <button type="submit" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100 px-4" >
                 Export Excel 
                 <img class="ml-auto" style="width:30px" src="assets/images/excel.png" />
               </button>
+              <a href="http://subdomain.localport.top/electric/public/electric/export-data?_token=TzvWUqzbf5QSLBRdf6fwGinWYrdGW0ZHGuES08b6&from_date=2022-07-15T10%3A47&to_date=2022-07-15T10%3A49&line=&status=&skuid="> TEST </a>
             
            
             </li>
           </ul>
         </nav>
+      </form>
+      <form id="form-"  method="POST" action="{{route('export-data')}}">
       </form>
       <!-- partial -->
       <div class="main-panel">
@@ -703,11 +706,14 @@ stuff <a href="#">link</a>
   }
 
   function exportData(){
+    $("#form-data").submit();
     // const url  = window.baseURL + "/export-data?" + $("#form-data").serialize();
-    const url = "{{route('export-data')}}?" + $("#form-data").serialize();
+    // const url = "{{route('export-data')}}?" + $("#form-data").serialize();
+
+
   //  var mywindow =  window.open(window.baseURL + "/export-data?" + $("#form-data").serialize());
- var myWindow =  window.open(url, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
-   myWindow.document.body.innerHTML = "<h1 style='font-size:100rem'>File is dowloading ........</h1>";
+//  var myWindow =  window.open(url, 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+//    myWindow.document.body.innerHTML = "<h1 style='font-size:100rem'>File is dowloading ........</h1>";
 
 
    
