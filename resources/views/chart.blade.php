@@ -559,14 +559,22 @@ stuff <a href="#">link</a>
       "serverSide": true,
       "searching": false,
       "ajax": {
-        "type": "GET",
-        "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), // đường dẫn trỏ tới Controller trả về dữ liệu
+        dataType: "json",
+        "type": "POST",
+        // "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), 
+        url: "{{route('get-datatable')}}?" + $("#form-data") ,
         data: function(d) {
 
-          // d["params"] = JSON.parse($("#form-data").serialize());
+          var formData = JSON.parse(JSON.stringify(jQuery('#form-data').serializeArray())) // store json object
+          const obj = {};
+          formData.forEach(e=>obj[e["name"]] = e["value"]);
+          d["params"] = obj;
           // d.custom = $('#myInput').val();
           // etc
         },
+        error: function (request, status, error) {
+            console.log( "ERROR: ", request.responseText);
+        }
 
 
       }
@@ -655,7 +663,8 @@ stuff <a href="#">link</a>
   table.destroy();
   function processReport(){
       $.ajax({
-        url: "{{$data['base_url']}}" + "/get-data",
+        // url: "{{$data['base_url']}}" + "/get-data",
+        url:"{{route('get-data')}}",
         type: 'POST',
         dataType: "json",
         data: $("#form-data").serialize()
@@ -694,7 +703,8 @@ stuff <a href="#">link</a>
   }
 
   function exportData(){
-    const url  = window.baseURL + "/export-data?" + $("#form-data").serialize();
+    // const url  = window.baseURL + "/export-data?" + $("#form-data").serialize();
+    const url = "{{route('export-data')}}?" + $("#form-data").serialize();
   //  var mywindow =  window.open(window.baseURL + "/export-data?" + $("#form-data").serialize());
  var myWindow =  window.open(url, '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
    myWindow.document.body.innerHTML = "<h1 style='font-size:100rem'>File is dowloading ........</h1>";

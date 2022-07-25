@@ -164,10 +164,14 @@ class MainController extends Controller
          *  recordsFiltered : số bản ghi thỏa mãn điều kiện 
          * data : là mảng 2 chiều trong đó mỗi mảng 1 chiều con tương ứng với 1 hàng (row) trên bảng hiển thị phía người dùng .
          * */
+
         $params = $request -> all();
+        $params = $params["params"];
         $format = "Y-m-d H:i:s";
         $fromDate = Carbon::parse($params["from_date"])->format($format);
         $toDate = Carbon::parse($params["to_date"])->format($format);
+        // dd("DATEEEEE: ", $fromDate, $toDate);
+       
         $fieldsSelected = ['ID', 'DateTime', 'Status', 'SKUID', 'ProductName', 'Line', 'Reject'];
         $draw = $request->draw; // draw là số thứ tự của request datatable . Nó dùng để khớp kết quả khi hàm onchange 10 lần có 10 request nhưng response gõ cuối cùng đến sớm hơn cái gõ trước đó
         $key = $request->search['value'];

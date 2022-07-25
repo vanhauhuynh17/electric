@@ -64,7 +64,8 @@
 <script>
   function submitLogin(){
     $.ajax({
-          url: "{{$data['base_url']}}/login",
+          // url: "{{$data['base_url']}}/login",
+          url:"{{route('post-login')}}",
           type: 'POST',
           dataType: "json",
           data:{
