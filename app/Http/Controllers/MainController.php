@@ -230,6 +230,81 @@ class MainController extends Controller
         ]);
     }
 
+    
+    public function getDetailData(Request $request){
+        // return Excel::store(new DatamanExport([]), 'invoices.xlsx', "report");
+        // todo: validate--------------
+  
+        $params = $request->all();
+        // return "123";
+        $format = "Y-m-d H:i:s";
+        // dd($params);
+        // return $params;
+        if(!isset($params["from_date"])) {
+            return Redirect::back()->withErrors(['msg' => 'From Date required !']);
+        }
+        if(!isset($params["to_date"])) {
+            
+            return Redirect::back()->withErrors(['msg' => 'To Date required !']);
+        }
+       
+      
+        if (!isset($params["page"])){
+            $page = 1;
+        }
+        else{
+            $page = $params["page"];
+        }
+        $limit = 10;
+        $start = ($page - 1)*$limit + 1;
+        $prev = 1;
+        $next = 1;
+        if($page > 1){
+            $prev = $page - 1;
+        }
+        $next = $page + 1;
+        
+        // $filename = "test.xlsx";
+        // $spreadsheet = new Spreadsheet();
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $sheet->setCellValue('A1', 'DateTime'); 
+        // $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        // $writer->setPreCalculateFormulas(false);
+
+
+// todo: Dataaaaa-------------------
+$query = DB::table("Table_ResultDataman");
+if (isset($params["from_date"]) && $params["from_date"] !== ""){
+    $fromDate = Carbon::parse($params["from_date"])->format($format);
+    $query -> where("DateTime",">=", $fromDate);
+}
+if (isset($params["to_date"]) && $params["to_date"] !== ""){
+    $toDate = Carbon::parse($params["to_date"])->format($format);
+    $query -> where("DateTime","<=", $toDate);
+}
+if(isset($params["status"]) && $params["status"] !==""){
+    $query -> where("Status","=", $params["status"]);
+
+}
+if(isset($params["line"]) && $params["line"] !==""){
+    $query -> where("Line","=", $params["line"]);
+
+}
+if(isset($params["SKUID"]) && $params["SKUID"] !==""){
+    $query -> where("SKUID","=", $params["SKUID"]);
+
+}
+
+$data = $query->offset($start)->limit($limit)->get();
+$result = [
+    "data" => $data,
+    "prev" => $prev,
+    "next" => $next
+];
+return response()->json($result);
+
+}
+
     public function exportData(Request $request){
         // return Excel::store(new DatamanExport([]), 'invoices.xlsx', "report");
         // todo: validate--------------

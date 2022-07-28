@@ -358,9 +358,7 @@ stuff <a href="#">link</a>
               <button type="submit" class="nav-link nav-link btn rounded btn-primary text-light font-weight-bold w-100 px-4" >
                 Export Excel 
                 <img class="ml-auto" style="width:30px" src="assets/images/excel.png" />
-              </button>
-              <a href="http://subdomain.localport.top/electric/public/electric/export-data?_token=TzvWUqzbf5QSLBRdf6fwGinWYrdGW0ZHGuES08b6&from_date=2022-07-15T10%3A47&to_date=2022-07-15T10%3A49&line=&status=&skuid="> TEST </a>
-            
+              </button>      
            
             </li>
           </ul>
@@ -478,7 +476,13 @@ stuff <a href="#">link</a>
                         </th>
                       </tr>
                     </thead>
+                    <tbody>
+                    </tbody>
                   </table>
+                  <div class="mt-4">
+                    <button class="pagination" id="btn-prev" data-page="" class="btn btn-light"> Previous </button>
+                    <button class="pagination" id="btn-next" data-page="" class="btn btn-light pl-4"> Next </button>
+                  </div>
 
 
 
@@ -553,36 +557,39 @@ stuff <a href="#">link</a>
     $("#count_total").text(count_total);
 
     // todo: Detail Data----------
-    if (table) {
-      table.destroy()
-    }
+    // if (table) {
+    //   table.destroy()
+    // }
+
+
+   
     // table.destroy();
-    table = $('#table-detail-data').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "searching": false,
-      "ajax": {
-        dataType: "json",
-        "type": "POST",
-        // "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), 
-        url: "{{route('get-datatable')}}?" + $("#form-data") ,
-        data: function(d) {
+    // table = $('#table-detail-data').DataTable({
+    //   "processing": true,
+    //   "serverSide": true,
+    //   "searching": false,
+    //   "ajax": {
+    //     dataType: "json",
+    //     "type": "POST",
+    //     // "url": window.baseURL + "/get-datatable?" + $("#form-data").serialize(), 
+    //     url: "{{route('get-datatable')}}?" + $("#form-data") ,
+    //     data: function(d) {
 
-          var formData = JSON.parse(JSON.stringify(jQuery('#form-data').serializeArray())) // store json object
-          const obj = {};
-          formData.forEach(e=>obj[e["name"]] = e["value"]);
-          d["params"] = obj;
-          // d.custom = $('#myInput').val();
-          // etc
-        },
-        error: function (request, status, error) {
-            console.log( "ERROR: ", request.responseText);
-        }
+    //       var formData = JSON.parse(JSON.stringify(jQuery('#form-data').serializeArray())) // store json object
+    //       const obj = {};
+    //       formData.forEach(e=>obj[e["name"]] = e["value"]);
+    //       d["params"] = obj;
+    //       // d.custom = $('#myInput').val();
+    //       // etc
+    //     },
+    //     error: function (request, status, error) {
+    //         console.log( "ERROR: ", request.responseText);
+    //     }
 
 
-      }
+    //   }
 
-    });
+    // });
 
     // Config---------------------
 
@@ -663,8 +670,9 @@ stuff <a href="#">link</a>
       processReport();
     },100);
   });
-  table.destroy();
+  // table.destroy();
   function processReport(){
+      // debugger
       $.ajax({
         // url: "{{$data['base_url']}}" + "/get-data",
         url:"{{route('get-data')}}",
@@ -675,59 +683,54 @@ stuff <a href="#">link</a>
         handleData(data);
         $(".loading").toggle();
       });
-  }
-  function processExport(){
-    $.ajax({
-      url: "{{$data['base_url']}}" + "/export-data",
-      type: 'GET',
-      dataType: "json",
-      async: false,
-      data: $("#form-data").serialize(),
-      success: function(data) {
-        if (data.error) {           
-                  $(".loading").toggle();
-                Swal.fire(
-                  'Export failed !',
-                  data.message,
-                  'error'
-                )          
-         
-        } else {          
-                $(".loading").toggle();
-                Swal.fire(
-                  'Export Successfully !',
-                  data.message,
-                  'success'
-                )           
-         
-        }
-      }
-    });
+
+      $.ajax({
+        // url: "{{$data['base_url']}}" + "/get-data",
+        url:"{{route('get-detail-data')}}",
+        type: 'POST',
+        dataType: "json",
+        data: $("#form-data").serialize()
+      }).done(function(data) {
+          let html = "";
+          $("#btn-prev").attr("data-page", data.prev);
+          $("#btn-next").attr("data-page", data.next);
+          console.log("DATAAAAA: ", data);
+          data.data.forEach(e=>{
+            const tr = `
+              <tr>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+                  <td>${e.ID}</td>
+              </tr>`;
+              html += tr;
+          });
+          console.log("HTMLLLLLLL: ", html);
+          $("#table-detail-data tbody").html(html);
+          // $("tbody").last().html(html);
+          
+      });
   }
 
   function exportData(){
     $("#form-data").submit();
-    // const url  = window.baseURL + "/export-data?" + $("#form-data").serialize();
-    // const url = "{{route('export-data')}}?" + $("#form-data").serialize();
-
-
-  //  var mywindow =  window.open(window.baseURL + "/export-data?" + $("#form-data").serialize());
-//  var myWindow =  window.open(url, 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
-//    myWindow.document.body.innerHTML = "<h1 style='font-size:100rem'>File is dowloading ........</h1>";
-
-
-   
   }
-  // function exportData() {
-  //   $(".loading").css("display", "block");
-  //   setTimeout(()=>{
-  //     processExport();
-  //   }, 100);
-  
 
-  // }
+  var ChartHandler = {
+    init: function(){
 
+    },
+    onPagination:function(){
+      $(".pagination").click(function(){
+          let page = $(this).attr("data-page");
+          page = parseInt(page);
 
+      });
+    }
+  }
   $(document).ready(function() {
   
   });
