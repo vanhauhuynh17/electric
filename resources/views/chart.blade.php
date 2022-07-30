@@ -694,7 +694,8 @@ stuff <a href="#">link</a>
 
   var ChartHandler = {
     init: function(){
-      this.onBtnNext();
+      // this.onBtnNext();
+      this.onPagination();
 
     },
     onBtnNext:function(){
@@ -705,9 +706,11 @@ stuff <a href="#">link</a>
     },
     onPagination:function(){
       $(".pagination").click(function(){
+          $(".loading").css("display", "block");
           let page = $(this).attr("data-page");
           page = parseInt(page);
-
+          ChartHandler.getDetailData(page);
+        
       });
     },
     getDetailData:function(page = 1){
@@ -732,12 +735,11 @@ stuff <a href="#">link</a>
                   <td>${e.ID}</td>
                   <td>${e.ID}</td>
               </tr>`;
+            
               html += tr;
           });
-          console.log("HTMLLLLLLL: ", html);
           $("#table-detail-data tbody").html(html);
-          // $("tbody").last().html(html);
-          
+          $(".loading").css("display", "none");   
       });
     }
   }
