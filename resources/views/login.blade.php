@@ -78,7 +78,7 @@
           }
           else{
             $(".error").css("display", "none");
-            window.location.href = "/index";
+            window.location.href = "/electric/public/index";
           }
           $(".loading").toggle();
         });

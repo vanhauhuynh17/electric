@@ -479,9 +479,9 @@ stuff <a href="#">link</a>
                     <tbody>
                     </tbody>
                   </table>
-                  <div class="mt-4">
-                    <button class="pagination" id="btn-prev" data-page="" class="btn btn-light"> Previous </button>
-                    <button class="pagination" id="btn-next" data-page="" class="btn btn-light pl-4"> Next </button>
+                  <div class="mt-4 d-flex">
+                    <button  id="btn-prev" data-page="1" class="pagination btn btn-light"> Previous </button>
+                    <button  id="btn-next" data-page="1" class="pagination btn btn-light pl-4 ml-3"> Next </button>
                   </div>
 
 
@@ -683,18 +683,44 @@ stuff <a href="#">link</a>
         handleData(data);
         $(".loading").toggle();
       });
+      ChartHandler.getDetailData(1);
 
+
+  }
+
+  function exportData(){
+    $("#form-data").submit();
+  }
+
+  var ChartHandler = {
+    init: function(){
+      this.onBtnNext();
+
+    },
+    onBtnNext:function(){
+      $("#btn-next").click(function(){
+        const page = $(this).attr("data-page");
+        alert("Page: " + page);
+      });
+    },
+    onPagination:function(){
+      $(".pagination").click(function(){
+          let page = $(this).attr("data-page");
+          page = parseInt(page);
+
+      });
+    },
+    getDetailData:function(page = 1){
       $.ajax({
         // url: "{{$data['base_url']}}" + "/get-data",
         url:"{{route('get-detail-data')}}",
         type: 'POST',
         dataType: "json",
-        data: $("#form-data").serialize()
+        data: $("#form-data").serialize() + "&page=" + page 
       }).done(function(data) {
           let html = "";
           $("#btn-prev").attr("data-page", data.prev);
           $("#btn-next").attr("data-page", data.next);
-          console.log("DATAAAAA: ", data);
           data.data.forEach(e=>{
             const tr = `
               <tr>
@@ -713,26 +739,10 @@ stuff <a href="#">link</a>
           // $("tbody").last().html(html);
           
       });
-  }
-
-  function exportData(){
-    $("#form-data").submit();
-  }
-
-  var ChartHandler = {
-    init: function(){
-
-    },
-    onPagination:function(){
-      $(".pagination").click(function(){
-          let page = $(this).attr("data-page");
-          page = parseInt(page);
-
-      });
     }
   }
   $(document).ready(function() {
-  
+    ChartHandler.init();
   });
 </script>
 @endsection
