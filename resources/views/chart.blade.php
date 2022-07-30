@@ -379,7 +379,7 @@ stuff <a href="#">link</a>
 
                     @endforeach
                     @php
-                       \Session::flush('errors');
+                      //  \Session::flush('errors');
                 @endphp
                     @endif
                   </div>
@@ -673,6 +673,10 @@ stuff <a href="#">link</a>
 
   $("#btn-report").click(function(e) {
     e.preventDefault();
+    const d1 = $("[name='from_date']").val();
+    const d2 = $("[name='to_date']").val();
+    const isValidDate = ChartHandler.inDays(d1, d2);
+    console.log("VALIDDDDDDDDDD: ", isValidDate);
     $(".loading").css("display", "block");
     setTimeout(()=>{
       processReport();
@@ -689,7 +693,7 @@ stuff <a href="#">link</a>
         data: $("#form-data").serialize()
       }).done(function(data) {
         handleData(data);
-        $(".loading").toggle();
+        $(".loading").css("display", "none");
       });
       ChartHandler.getDetailData(1);
 
@@ -705,6 +709,14 @@ stuff <a href="#">link</a>
       // this.onBtnNext();
       this.onPagination();
 
+    },
+    inDays:function(d1, d2){
+        d1 = new Date(d1);
+        d2 = new Date(d2);
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+ 
+        return Math.floor((t2-t1)/(24*3600*1000));
     },
     onBtnNext:function(){
       $("#btn-next").click(function(){
@@ -744,12 +756,12 @@ stuff <a href="#">link</a>
             const tr = `
               <tr>
                   <td>${e.ID}</td>
-                  <td>${e.ID}</td>
-                  <td>${e.ID}</td>
-                  <td>${e.ID}</td>
-                  <td>${e.ID}</td>
-                  <td>${e.ID}</td>
-                  <td>${e.ID}</td>
+                  <td>${e.DateTime}</td>
+                  <td>${e.Status}</td>
+                  <td>${e.SKUID}</td>
+                  <td>${e.ProductName}</td>
+                  <td>${e.Line}</td>
+                  <td>${e.Reject}</td>
               </tr>`;
             
               html += tr;

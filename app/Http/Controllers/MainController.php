@@ -247,8 +247,7 @@ class MainController extends Controller
             
             return Redirect::back()->withErrors(['msg' => 'To Date required !']);
         }
-       
-      
+        
         if (!isset($params["page"])){
             $page = 1;
         }
@@ -321,6 +320,14 @@ return response()->json($result);
             
             return Redirect::back()->withErrors(['msg' => 'To Date required !']);
         }
+
+        $fromDate = Carbon::parse($params["from_date"]);
+        $toDate = Carbon::parse($params["to_date"]);      
+        $diff = $toDate->diffInDays($fromDate);
+        if($diff > 1){
+            return Redirect::back()->withErrors(['msg' => "Data too large! Only export one day "]);
+        }
+       
         
         // $filename = "test.xlsx";
         // $spreadsheet = new Spreadsheet();
