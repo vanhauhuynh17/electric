@@ -516,6 +516,14 @@ stuff <a href="#">link</a>
 
 @endsection
 
+@section("css")
+<style>
+  .disabled  {
+    cursor: not-allowed !important;
+  }
+</style>
+@endsection
+
 @section("after_script")
 
 
@@ -722,6 +730,14 @@ stuff <a href="#">link</a>
         data: $("#form-data").serialize() + "&page=" + page 
       }).done(function(data) {
           let html = "";
+          if(data.prev == 1){
+            $("#btn-prev").addClass("disabled");
+            $("#btn-prev").attr("data-page", data.prev);
+          }
+          else{
+            $("#btn-prev").removeClass("disabled");
+
+          }
           $("#btn-prev").attr("data-page", data.prev);
           $("#btn-next").attr("data-page", data.next);
           data.data.forEach(e=>{
